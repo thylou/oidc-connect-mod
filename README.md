@@ -1,4 +1,4 @@
-# oidc-connect
+# oidc-connect-pf
 
 > Gravitee login module, created with CRL
 
@@ -15,8 +15,8 @@ npm install --save oidc-connect
 ```jsx
 import React, { Component } from 'react'
 
-import IODCComponent from 'oidc-connect'
-import 'oidc-connect/dist/index.css'
+import IODCComponent from 'oidc-connect-pf'
+import 'oidc-connect-pf/dist/index.css'
 
 
 const setUserToken = (resp) => {

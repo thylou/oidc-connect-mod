@@ -75,23 +75,29 @@ const OIDCComponentReact = (props) => {
 
     // useEffect
     useEffect(() => {
-      // ceck url params
-      _H.getcode(props.window.location).then((res) => {
-        if (res === undefined){
-          //Call init
-          if(isReady === undefined){
-            if(_init(props)){
-              setIsReady(true)
-              prepare_variable(props)
+      // console.log("localStorage.getItem('oidc-in') = ", localStorage.getItem('oidc-in'))
+      if(localStorage.getItem('oidc-in') === null){
+        // ceck url params
+        _H.getcode(props.window.location).then((res) => {
+          if (res === undefined){
+            //Call init
+            if(isReady === undefined){
+              if(_init(props)){
+                setIsReady(true)
+                prepare_variable(props)
+              }
+              console.log("====> START LOGIN")
             }
-            console.log("====> START LOGIN")
+          }else{
+            console.log('Get token: ', res)
+            _H.getusertoken(props, res)
+            setIsReady(true)
           }
-        }else{
-          console.log('Get token: ', res)
-          _H.getusertoken(props, res)
-          setIsReady(true)
-        }
-      })
+        })
+      }else{
+        // already logged
+        setIsReady(true)
+      }
 
 
     },[])

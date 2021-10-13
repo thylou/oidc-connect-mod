@@ -10,6 +10,7 @@ class Helpers{
 
   async logout(props) {
     var url = "" + props.graviteeserver + props.graviteedomaine + "/logout?invalidate_tokens=true&target_url=" + props.redirecturl;
+    _H.manageuserlogin('out')
     props.window.location.href = url;
   }
 
@@ -67,6 +68,7 @@ class Helpers{
         callback({
           access_token:  res.data.access_token
         })
+        _H.manageuserlogin('in')
       }
     }).catch((err) => {
       // console.log('=========> ERROR - getUserToken: ', err.response);
@@ -96,6 +98,7 @@ class Helpers{
             access_token: access_token,
             user_data: res.data
           });
+          _H.manageuserlogin('in')
         }else{
           if (valid_roles.length > 0){
             res.data['roles'] = valid_roles
@@ -103,6 +106,7 @@ class Helpers{
               access_token: access_token,
               user_data: res.data
             });
+            _H.manageuserlogin('in')
           } else{
             callback({ error_code:403, error_message:'Right needed !, Please contact application admin !' })
           }
@@ -130,6 +134,17 @@ class Helpers{
     return roles_validated
   }
 
+  async manageuserlogin(type){
+    switch (type){
+      case 'in':{
+        localStorage.setItem('oidc-in','1')
+        break;
+      }
+      case 'out':{
+        localStorage.removeItem('oidc-in')
+      }
+    }
+  }
 
   async getdevmodetoken(){
     const act = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJlbWFpbCI6Impkb0BtYWlsLmNvbSJ9.Q2tDAkrVf10jcthgKAyHo0W6iGhMqA1OSnX_KP-mSkM'
