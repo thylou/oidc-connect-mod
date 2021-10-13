@@ -12,3 +12,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.logout_btn{
+  width: 100px;
+  height: 50px;
+  border: 1px solid red;
+  background-color: red;
+  color: #FFF;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  margin:10px;
+}
