@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ExampleComponent } from 'oidc-connect'
+import { OIDCComponent } from 'oidc-connect'
 import 'oidc-connect/dist/index.css'
 
 const App = () => {
@@ -16,11 +16,11 @@ const App = () => {
     )
   }
 
-  return <ExampleComponent
-                        text="Create React Library Example 😄"
+  return <OIDCComponent
                         apphost="apphost"
                         customButton={logout_btn}
                         className={undefined}
+                        userinfo={true}
                         devmode={process.env.REACT_APP_DEVMODE == 0 ? false : true}
                         devmode_data={{"user":"DEV-USER", "token":"dev_token_receive", "roles":"TAVIE_GESTION"}}
                         window={window}
@@ -28,7 +28,7 @@ const App = () => {
                         graviteedomaine="internal"
                         clientid={process.env.REACT_APP_GRAVITEE_ID}
                         redirecturl={`${process.env.REACT_APP_GRAVITEE_REDIRECT}`}
-                        roles={['TAVI_GESTION']}
+                        roles={[]}
                         bearer={process.env.REACT_APP_GRAVITEE_BASIC}
                         logoutcallback = {() => {console.log('Logout callback')}}
                         receivetokencallback = {(token) => {

@@ -61,14 +61,20 @@ class Helpers{
       var jwtObj = res.data.access_token.split('.');
 
       // console.log(jwt_decode(res.data.access_token));
-      _H.getuserinfo(jwt_decode(res.data.access_token), res.data.access_token, callback);
+      if (props.userinfo === true){
+        _H.getuserinfo(jwt_decode(res.data.access_token), res.data.access_token, callback, props);
+      }else{
+        callback({
+          access_token:  res.data.access_token
+        })
+      }
     }).catch((err) => {
       // console.log('=========> ERROR - getUserToken: ', err.response);
       callback(err.response.data)
     });
   }
 
-  async getuserinfo(jwtObj, access_token, callback) {
+  async getuserinfo(jwtObj, access_token, callback, props) {
     if (callback === void 0) {
       callback = undefined;
     }
@@ -81,15 +87,49 @@ class Helpers{
     var url = jwtObj.iss + "/userinfo";
     axios.get(url, config).then(function (res) {
       console.log('getUserInfo', res.data);
-      callback({
-        access_token: access_token,
-        user_data: res.data
-      });
+
+      _H.checkUserRoles(props, res.data).then((valid_roles) => {
+        console.log("valid_roles = ", valid_roles)
+        if(props.roles.length === 0){
+          res.data['roles'] = []
+          callback({
+            access_token: access_token,
+            user_data: res.data
+          });
+        }else{
+          if (valid_roles.length > 0){
+            res.data['roles'] = valid_roles
+            callback({
+              access_token: access_token,
+              user_data: res.data
+            });
+          } else{
+            callback({ error_code:403, error_message:'Right needed !, Please contact application admin !' })
+          }
+        }
+      })
+
+
     }).catch((err) => {
-      // console.log('ERROR - getUserToken: ', err);
+      console.log('ERROR - getUserToken: ', err);
       callback(err.response.data)
     });
-  };
+  }
+
+  async checkUserRoles(props, usr_data){
+    const usr_roles = usr_data['roles']
+    let roles_validated = []
+
+    if(usr_roles != undefined){
+      for (var id in usr_roles){
+        if (props.roles.includes(usr_roles[id])){
+          roles_validated.push(usr_roles[id])
+        }
+      }
+    }
+    return roles_validated
+  }
+
 
   async getdevmodetoken(){
     const act = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJlbWFpbCI6Impkb0BtYWlsLmNvbSJ9.Q2tDAkrVf10jcthgKAyHo0W6iGhMqA1OSnX_KP-mSkM'

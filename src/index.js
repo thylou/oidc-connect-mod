@@ -7,7 +7,7 @@ import _H  from './helpers.js'
 //   return <div className={styles.test}>Example Component: {text}</div>
 // }
 
-export const oidcComponent = (props) => {
+const OIDCComponentReact = (props) => {
     // console.log("ExampleComponent: ", Object.keys(props))
 
     const LogoutButtonComponent = props.customButton;
@@ -24,26 +24,18 @@ export const oidcComponent = (props) => {
 
     // check required properties
     const _init = (props) =>{
-      if (props.graviteeserver != undefined){
-        if(props.graviteedomaine != undefined){
-          if(props.redirecturl != undefined){
-            if(props.clientid != undefined){
-              if(props.bearer != undefined){
-                if(props.roles != undefined){
-                  if(props.window != undefined){
-                    if(props.apphost != undefined){
-                      if(props.devmode != undefined){
-                        if(props.devmode_data != undefined){
+      if (props.graviteeserver != undefined && props.graviteedomaine != undefined){
+          if(props.redirecturl != undefined && props.clientid != undefined){
+              if(props.bearer != undefined && props.roles != undefined){
+                  if(props.window != undefined && props.apphost != undefined){
+                      if(props.devmode != undefined && props.devmode_data != undefined){
+                        if(props.userinfo != undefined){
                           return true
                         }
                       }
-                    }
                   }
-                }
               }
-            }
           }
-        }
       }
       return false
     }
@@ -120,4 +112,8 @@ export const oidcComponent = (props) => {
         }
       </>
     )
+}
+
+export {
+  OIDCComponentReact as OIDCComponent
 }
