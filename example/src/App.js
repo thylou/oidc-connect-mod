@@ -8,6 +8,8 @@ const App = () => {
     console.log('USER TOKEN RECEIVED: ', resp)
   }
 
+  
+
   const logout_btn = (props) => {
     return (
       <div className="logout_btn">

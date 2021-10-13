@@ -1,5 +1,5 @@
 import React from 'react'
-import  { useState, useEffect, Fragment } from 'react'
+import  { useState, useLayoutEffect, Fragment } from 'react'
 import styles from './styles.module.css'
 import _H  from './helpers.js'
 
@@ -13,7 +13,7 @@ const OIDCComponentReact = (props) => {
     const LogoutButtonComponent = props.customButton;
 
     // State
-    const [isReady, setIsReady] = useState(undefined)
+    const [isReady, setIsReady] = useState()
     const [loginurl, setLoginUrl] = useState(undefined)
     const [tokenurl, setTokenUrl] = useState(undefined)
 
@@ -74,7 +74,7 @@ const OIDCComponentReact = (props) => {
     }
 
     // useEffect
-    useEffect(() => {
+    useLayoutEffect(() => {
       // console.log("localStorage.getItem('oidc-in') = ", localStorage.getItem('oidc-in'))
       if(localStorage.getItem('oidc-in') === null){
         // ceck url params
@@ -86,19 +86,28 @@ const OIDCComponentReact = (props) => {
                 setIsReady(true)
                 prepare_variable(props)
               }
-              console.log("====> START LOGIN")
+              // console.log("====> START LOGIN")
             }
           }else{
-            console.log('Get token: ', res)
-            _H.getusertoken(props, res)
-            setIsReady(true)
+            // console.log('Get token: ', res)
+            if(localStorage.getItem('oidc-in') !== res){
+              _H.getusertoken(props, res)
+            }
+            if(isReady != true) {
+              setIsReady(true)
+            }
           }
         })
       }else{
         // already logged
-        setIsReady(true)
+        if(isReady != true) {
+          setIsReady(true)
+        }
       }
 
+      return function cleanup() {
+        localStorage.removeItem('oidc-in')
+      }
 
     },[])
 

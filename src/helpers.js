@@ -63,12 +63,13 @@ class Helpers{
 
       // console.log(jwt_decode(res.data.access_token));
       if (props.userinfo === true){
+        _H.manageuserlogin('in', code)
         _H.getuserinfo(jwt_decode(res.data.access_token), res.data.access_token, callback, props);
       }else{
+        _H.manageuserlogin('in', code)
         callback({
           access_token:  res.data.access_token
         })
-        _H.manageuserlogin('in')
       }
     }).catch((err) => {
       // console.log('=========> ERROR - getUserToken: ', err.response);
@@ -98,7 +99,7 @@ class Helpers{
             access_token: access_token,
             user_data: res.data
           });
-          _H.manageuserlogin('in')
+
         }else{
           if (valid_roles.length > 0){
             res.data['roles'] = valid_roles
@@ -106,7 +107,7 @@ class Helpers{
               access_token: access_token,
               user_data: res.data
             });
-            _H.manageuserlogin('in')
+
           } else{
             callback({ error_code:403, error_message:'Right needed !, Please contact application admin !' })
           }
@@ -134,10 +135,10 @@ class Helpers{
     return roles_validated
   }
 
-  async manageuserlogin(type){
+  async manageuserlogin(type, code=undefined){
     switch (type){
       case 'in':{
-        localStorage.setItem('oidc-in','1')
+        localStorage.setItem('oidc-in',code)
         break;
       }
       case 'out':{
