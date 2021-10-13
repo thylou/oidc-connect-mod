@@ -7,7 +7,7 @@ import _H  from './helpers.js'
 //   return <div className={styles.test}>Example Component: {text}</div>
 // }
 
-export const ExampleComponent = (props) => {
+export const oidcComponent = (props) => {
     // console.log("ExampleComponent: ", Object.keys(props))
 
     const LogoutButtonComponent = props.customButton;
@@ -71,7 +71,7 @@ export const ExampleComponent = (props) => {
       }else if (props.devmode === true){
         _H.getdevmodetoken().then((res) => {
             const devdata = {access_token: res, user_data:props.devmode_data}
-            props.token_callback(devdata)
+            props.receivetokencallback(devdata)
         })
       }
     }
