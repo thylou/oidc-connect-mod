@@ -40,13 +40,13 @@ class Helpers{
       redirect_uri: props.redirecturl,
       client_id: props.clientid
     };
-    console.log('tokenurldata:', qs.stringify(data2));
+    // console.log('tokenurldata:', qs.stringify(data2));
     return data2;
   }
 
   async getcode(location){
     let parsed = queryString.parse(location.search);
-    console.log("LOCATION:", location.search, parsed.code);
+    // console.log("LOCATION:", location.search, parsed.code);
 
     return parsed.code
   }
@@ -86,7 +86,7 @@ class Helpers{
     };
     var url = jwtObj.iss + "/userinfo";
     axios.get(url, config).then(function (res) {
-      console.log('getUserInfo', res.data);
+      // console.log('getUserInfo', res.data);
 
       _H.checkUserRoles(props, res.data).then((valid_roles) => {
         console.log("valid_roles = ", valid_roles)

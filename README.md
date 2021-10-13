@@ -15,12 +15,34 @@ npm install --save oidc-connect
 ```jsx
 import React, { Component } from 'react'
 
-import MyComponent from 'oidc-connect'
+import IODCComponent from 'oidc-connect'
 import 'oidc-connect/dist/index.css'
+
+
+const setUserToken = (resp) => {
+  console.log('USER TOKEN RECEIVED: ', resp)
+}
 
 class Example extends Component {
   render() {
-    return <MyComponent />
+    return <OIDCComponent
+                          apphost="apphost"
+                          customButton={logout_btn}
+                          className={undefined}
+                          userinfo={true}
+                          devmode={process.env.REACT_APP_DEVMODE == 0 ? false : true}
+                          devmode_data={{"user":"DEV-USER", "token":"dev_token_receive", "roles":"TAVIE_GESTION"}}
+                          window={window}
+                          graviteeserver={process.env.REACT_APP_GRAVITEE_HOST}
+                          graviteedomaine="internal"
+                          clientid={process.env.REACT_APP_GRAVITEE_ID}
+                          redirecturl={`${process.env.REACT_APP_GRAVITEE_REDIRECT}`}
+                          roles={[]}
+                          bearer={process.env.REACT_APP_GRAVITEE_BASIC}
+                          logoutcallback = {() => {console.log('Logout callback')}}
+                          receivetokencallback = {(token) => {
+                              setUserToken(token)
+                            }}/>
   }
 }
 ```

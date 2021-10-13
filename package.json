@@ -24,7 +24,9 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^16.0.0",
+    "axios": "^0.23.0",
+    "jwt-decode": "^3.1.2"
   },
   "devDependencies": {
     "microbundle-crl": "^0.13.10",

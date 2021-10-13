@@ -44,7 +44,7 @@ const OIDCComponentReact = (props) => {
       // loginurl
       _H.loginurl(props).then((res) => {
         setLoginUrl(res)
-        console.log("Loginurl = ", res)
+        // console.log("Loginurl = ", res)
         // call apimlogin
         apimlogin(props, res)
       })
