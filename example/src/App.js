@@ -6,9 +6,10 @@ import 'oidc-connect/dist/index.css'
 const App = () => {
   const setUserToken = (resp) => {
     console.log('USER TOKEN RECEIVED: ', resp)
+    localStorage.setItem('oidc-token',resp)
   }
 
-  
+
 
   const logout_btn = (props) => {
     return (

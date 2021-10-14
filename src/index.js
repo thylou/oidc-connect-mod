@@ -69,8 +69,8 @@ const OIDCComponentReact = (props) => {
     }
 
     const logout = (props) => {
-      props.logoutcallback();
       _H.logout(props);
+      props.logoutcallback();
     }
 
     // useEffect
@@ -106,7 +106,7 @@ const OIDCComponentReact = (props) => {
       }
 
       return function cleanup() {
-        localStorage.removeItem('oidc-in')
+        console.log("Cleanup OIDC Component")
       }
 
     },[])

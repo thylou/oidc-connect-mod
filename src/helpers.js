@@ -10,8 +10,8 @@ class Helpers{
 
   async logout(props) {
     var url = "" + props.graviteeserver + props.graviteedomaine + "/logout?invalidate_tokens=true&target_url=" + props.redirecturl;
-    _H.manageuserlogin('out')
     props.window.location.href = url;
+    await _H.manageuserlogin('out')
   }
 
   async loginurl(props){
@@ -58,15 +58,14 @@ class Helpers{
     const tokenurlheader = await _H.tokenurlheader(props)
 
     const callback = props.receivetokencallback
+    const aux = await _H.manageuserlogin('in', code)
     axios.post(tokenurl, qs.stringify(tokenurldata), tokenurlheader).then(function (res) {
       var jwtObj = res.data.access_token.split('.');
 
       // console.log(jwt_decode(res.data.access_token));
       if (props.userinfo === true){
-        _H.manageuserlogin('in', code)
         _H.getuserinfo(jwt_decode(res.data.access_token), res.data.access_token, callback, props);
       }else{
-        _H.manageuserlogin('in', code)
         callback({
           access_token:  res.data.access_token
         })
@@ -138,11 +137,14 @@ class Helpers{
   async manageuserlogin(type, code=undefined){
     switch (type){
       case 'in':{
+        console.log("OIDC-IN:", type, code)
         localStorage.setItem('oidc-in',code)
         break;
       }
       case 'out':{
+        console.log("OIDC-OUT:", type, code)
         localStorage.removeItem('oidc-in')
+        break;
       }
     }
   }

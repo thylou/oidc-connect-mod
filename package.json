@@ -1,6 +1,6 @@
 {
   "name": "oidc-connect-pf",
-  "version": "1.0.2",
+  "version": "1.0.9",
   "description": "Gravitee login module, created with CRL",
   "author": "Thierry LOUREL",
   "license": "MIT Open source",

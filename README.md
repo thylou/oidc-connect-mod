@@ -7,7 +7,7 @@
 ## Install
 
 ```bash
-npm install --save oidc-connect
+npm install --save oidc-connect-pf
 ```
 
 ## Usage
