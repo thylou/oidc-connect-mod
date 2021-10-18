@@ -7,9 +7,13 @@ const App = () => {
   const setUserToken = (resp) => {
     console.log('USER TOKEN RECEIVED: ', resp)
     localStorage.setItem('oidc-token',resp)
+    // window.location.href = process.env.REACT_APP_GRAVITEE_REDIRECT
   }
 
-
+  const logout = () => {
+    console.log('Logout callback')
+    localStorage.removeItem('oidc-token')
+  }
 
   const logout_btn = (props) => {
     return (
@@ -33,10 +37,8 @@ const App = () => {
                         redirecturl={`${process.env.REACT_APP_GRAVITEE_REDIRECT}`}
                         roles={[]}
                         bearer={process.env.REACT_APP_GRAVITEE_BASIC}
-                        logoutcallback = {() => {console.log('Logout callback')}}
-                        receivetokencallback = {(token) => {
-                            setUserToken(token)
-                          }}/>
+                        logoutcallback = {logout}
+                        receivetokencallback = {setUserToken}/>
 }
 
 export default App

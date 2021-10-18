@@ -10,8 +10,8 @@ class Helpers{
 
   async logout(props) {
     var url = "" + props.graviteeserver + props.graviteedomaine + "/logout?invalidate_tokens=true&target_url=" + props.redirecturl;
-    props.window.location.href = url;
     await _H.manageuserlogin('out')
+    props.window.location.href = url;
   }
 
   async loginurl(props){
@@ -45,11 +45,26 @@ class Helpers{
     return data2;
   }
 
-  async getcode(location){
+  getcode(location){
     let parsed = queryString.parse(location.search);
-    // console.log("LOCATION:", location.search, parsed.code);
 
-    return parsed.code
+    // console.log("OIDC-IN = ", localStorage.getItem('oidc-in'))
+    const aux = parsed.code
+    if (aux !== undefined){
+      if(localStorage.getItem('oidc-in') === null){
+        localStorage.setItem('oidc-in', aux)
+        return aux
+      }else{
+        if(localStorage.getItem('oidc-in') !== aux){
+  					localStorage.setItem('oidc-in', aux);
+  					return aux
+				}else{
+      	   return null;
+				}
+      }
+    }else{
+      return undefined
+    }
   }
 
   async getusertoken(props, code){
@@ -58,13 +73,14 @@ class Helpers{
     const tokenurlheader = await _H.tokenurlheader(props)
 
     const callback = props.receivetokencallback
-    const aux = await _H.manageuserlogin('in', code)
+    console.log("=== CALL GET USER TOKEN === for code: ", code)
+
     axios.post(tokenurl, qs.stringify(tokenurldata), tokenurlheader).then(function (res) {
       var jwtObj = res.data.access_token.split('.');
 
-      // console.log(jwt_decode(res.data.access_token));
+      console.log("TOKEN = ", res);
       if (props.userinfo === true){
-        _H.getuserinfo(jwt_decode(res.data.access_token), res.data.access_token, callback, props);
+        _H.getuserinfo(jwt_decode(res.data.access_token), res.data, callback, props);
       }else{
         callback({
           access_token:  res.data.access_token
@@ -76,14 +92,14 @@ class Helpers{
     });
   }
 
-  async getuserinfo(jwtObj, access_token, callback, props) {
+  async getuserinfo(jwtObj, data, callback, props) {
     if (callback === void 0) {
       callback = undefined;
     }
 
     var config = {
       headers: {
-        'Authorization': "Bearer " + access_token
+        'Authorization': "Bearer " + data.access_token
       }
     };
     var url = jwtObj.iss + "/userinfo";
@@ -95,7 +111,7 @@ class Helpers{
         if(props.roles.length === 0){
           res.data['roles'] = []
           callback({
-            access_token: access_token,
+            access_token: data.access_token,
             user_data: res.data
           });
 
@@ -103,7 +119,7 @@ class Helpers{
           if (valid_roles.length > 0){
             res.data['roles'] = valid_roles
             callback({
-              access_token: access_token,
+              access_token: data.access_token,
               user_data: res.data
             });
 
@@ -134,7 +150,7 @@ class Helpers{
     return roles_validated
   }
 
-  async manageuserlogin(type, code=undefined){
+  manageuserlogin(type, code=undefined){
     switch (type){
       case 'in':{
         console.log("OIDC-IN:", type, code)
@@ -147,6 +163,7 @@ class Helpers{
         break;
       }
     }
+    return localStorage.getItem('oidc-in')
   }
 
   async getdevmodetoken(){

@@ -13,7 +13,6 @@ const OIDCComponentReact = (props) => {
     const LogoutButtonComponent = props.customButton;
 
     // State
-    const [isReady, setIsReady] = useState()
     const [loginurl, setLoginUrl] = useState(undefined)
     const [tokenurl, setTokenUrl] = useState(undefined)
 
@@ -69,44 +68,31 @@ const OIDCComponentReact = (props) => {
     }
 
     const logout = (props) => {
-      _H.logout(props);
-      props.logoutcallback();
+      _H.logout(props).then(() => {
+        props.logoutcallback();
+      });
     }
 
     // useEffect
     useLayoutEffect(() => {
-      // console.log("localStorage.getItem('oidc-in') = ", localStorage.getItem('oidc-in'))
-      if(localStorage.getItem('oidc-in') === null){
-        // ceck url params
-        _H.getcode(props.window.location).then((res) => {
-          if (res === undefined){
-            //Call init
-            if(isReady === undefined){
-              if(_init(props)){
-                setIsReady(true)
-                prepare_variable(props)
-              }
-              // console.log("====> START LOGIN")
-            }
-          }else{
-            // console.log('Get token: ', res)
-            if(localStorage.getItem('oidc-in') !== res){
-              _H.getusertoken(props, res)
-            }
-            if(isReady != true) {
-              setIsReady(true)
+      let isMounted = true
+      if (_init(props)){
+          const code = _H.getcode(props.window.location)
+          if (isMounted){
+            if(code === undefined){
+              prepare_variable(props)
+            }else{
+                if(code !== null){
+                    console.log("GET TOKEN")
+                    _H.getusertoken(props, code)
+                }
             }
           }
-        })
-      }else{
-        // already logged
-        if(isReady != true) {
-          setIsReady(true)
-        }
       }
 
       return function cleanup() {
         console.log("Cleanup OIDC Component")
+        isMounted = false;
       }
 
     },[])
@@ -114,7 +100,7 @@ const OIDCComponentReact = (props) => {
     return (
       <>
         {
-          (isReady) &&  (
+          (_init(props)) &&  (
             <div className={props.className != undefined ? props.className : ''} onClick={() => logout(props) }>
                 {
                   (LogoutButtonComponent === undefined) && (<p>Logout</p>)
@@ -124,6 +110,9 @@ const OIDCComponentReact = (props) => {
                 }
             </div>
           )
+        }
+        {
+          (!_init(props)) &&  (<p style={{color:'red', padding:5}}>OIDC cfg ERROR</p>)
         }
       </>
     )
