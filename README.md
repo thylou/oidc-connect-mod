@@ -15,7 +15,7 @@ npm install --save oidc-connect-pf
 ```jsx
 import React, { Component } from 'react'
 
-import IODCComponent from 'oidc-connect-pf'
+import { OIDCComponent } from 'oidc-connect-pf'
 import 'oidc-connect-pf/dist/index.css'
 
 
@@ -40,9 +40,8 @@ class Example extends Component {
                           roles={[]}
                           bearer={process.env.REACT_APP_GRAVITEE_BASIC}
                           logoutcallback = {() => {console.log('Logout callback')}}
-                          receivetokencallback = {(token) => {
-                              setUserToken(token)
-                            }}/>
+                          receivetokencallback = {(token) => {setUserToken(token)}}
+            />
   }
 }
 ```
