@@ -1,6 +1,6 @@
 {
   "name": "oidc-connect-pf",
-  "version": "1.1.1",
+  "version": "1.1.17",
   "description": "Gravitee login module, created with CRL",
   "author": "Thierry LOUREL",
   "license": "MIT Open source",
@@ -24,7 +24,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^16.0.0",
+    "react": "^17.0.0",
     "axios": "^0.23.0",
     "jwt-decode": "^3.1.2"
   },
